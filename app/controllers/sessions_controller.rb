@@ -16,4 +16,7 @@ class SessionController < ApplicationController
     end             
   end
 
+  def logged_in
+  end
+
 end
