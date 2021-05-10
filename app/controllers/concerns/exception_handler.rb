@@ -1,5 +1,5 @@
 module ExceptionHandler 
-  extends ActiveSupport::Concern
+  extend ActiveSupport::Concern
 
   include do 
     rescue_from ActiveRecord::RecordNotFound do |e|

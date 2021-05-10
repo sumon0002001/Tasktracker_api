@@ -10,10 +10,30 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_08_181521) do
+ActiveRecord::Schema.define(version: 2021_06_18_204122) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "tasks", force: :cascade do |t|
+    t.integer "user", null: false
+    t.string "name"
+    t.string "description"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "trackings", force: :cascade do |t|
+    t.bigint "task_id", null: false
+    t.datetime "date"
+    t.string "type"
+    t.float "temperature"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "time", default: [], array: true
+    t.string "symptons", default: [], array: true
+    t.index ["task_id"], name: "index_trackings_on_task_id"
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "email"
@@ -22,4 +42,6 @@ ActiveRecord::Schema.define(version: 2021_05_08_181521) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  add_foreign_key "task", "users"
+  add_foreign_key "trackings", "tasks"
 end
