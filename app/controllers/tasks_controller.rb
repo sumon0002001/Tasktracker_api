@@ -1,39 +1,41 @@
-class TaskController < ApplicationController
+class TasksController < ApplicationController
   before_action :find_user
   before_action :find_task, only: %i[show update destroy]
 
   def index
-  render json: @user.task
+    render json: @user.tasks
   end
 
-  def show 
+  def show
     render json: @task
   end
 
   def create
     @task = Task.new(task_params)
-    if @task.save 
+    if @task.save
       render json: @task
     else
-      render json: {error: 'Unble to craete any task'}, status: 400
+
+      render json: { error: 'Unable to create Task' }, status: 400
     end
   end
 
   def update
     if @task
       @task.update(task_params)
-      render json: {message: 'Task is successfully updated'}, status: 200
+      render json: { message: 'task succesfully updated' }, status: 200
     else
-        render json: { error: 'Unable to update task'}, status: 400
+      render json: { error: 'Unable to update Task' }, status: 400
     end
   end
 
   def destroy
     if @task
-      @task.destroy 
-      render json: { message: 'Suucessfully deleted'}, status: 200
+      @task.destroy
+      render json: { message: 'task succesfully deleted' }, status: 200
     else
-      render json: { error: 'Cannot delete'}, status: 400
+      render json: { error: 'Unable to delete task' }, status: 400
+    end
   end
 
   private

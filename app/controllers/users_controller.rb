@@ -1,14 +1,14 @@
-class UsersController < ApplicationCoontroller
+class UsersController < ApplicationController
   def index
     @users = User.all
-    if @users 
+    if @users
       render json: {
         users: @users
       }
     else
       render json: {
         status: 500,
-        errors: { 'No users are found' }
+        errors: ['no users found']
       }
     end
   end
@@ -22,60 +22,52 @@ class UsersController < ApplicationCoontroller
     else
       render json: {
         status: 500,
-        errors: { 'no user is found' }
+        errors: ['user not found']
       }
     end
   end
 
   def create
     @user = User.new(user_params)
-    if @user
+    if @user.save
+      login!
       render json: {
-        status: 200,
+        status: :created,
         user: @user
-        message: { 'new user uis created' } 
       }
     else
       render json: {
         status: 500,
-        errors: { 'no user is created' }
+        errors: @user.errors.full_messages
       }
     end
   end
 
-  def update 
+  def update
     @user = User.find(params[:id])
-    if @user 
-     @user.update(user_params)
-     render json: {
-         message: { 'user is updated'}
-     },
-     status: 200
+    if @user
+      @user.update(user_params)
+      render json: { message: 'User succesfully updated' }, status: 200
     else
-      render json: {
-        errors: { 'something is wrong '},
-        status: 400
-      }
+
+      render json: { error: 'Unable to update User' }, status: 400
     end
   end
 
   def destroy
     @user = User.find(params[:id])
-    if @user.destroy
-      render json: {
-        message: { 'user is deleted' },
-        status: 200
-      }
+    if @user
+      @user.destroy
+      render json: { message: 'User succesfully deleted' }, status: 200
     else
-      render json: {
-        status: 400,
-        errors: { 'something is wrong' }
-      }
 
+      render json: { error: 'Unable to delete User' }, status: 400
     end
   end
 
+  private
+
   def user_params
-    user.require(:user).permit(:username, :password, :password_confirmation)
+    params.require(:user).permit(:username, :password, :password_confirmation)
   end
 end

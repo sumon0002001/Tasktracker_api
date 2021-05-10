@@ -6,7 +6,7 @@ class TrackingsController < ApplicationController
     render json: @task.trackings
   end
 
-  def show 
+  def show
     render json: @tracking
   end
 
@@ -16,40 +16,40 @@ class TrackingsController < ApplicationController
     if @tracking.save
       render json: @tracking
     else
-      render json: { error: 'unable to create date'}, status: 400
+
+      render json: { error: 'Unable to create Date' }, status: 400
     end
   end
 
   def update
-    if @tracking 
-      @tacking.update(tracking_params)
-      render json: { message: 'date is updated'}, status: 200
+    if @tracking
+      @tracking.update(tracking_params)
+      render json: { message: 'Date succesfully updated' }, status: 200
     else
-        render json: { error: 'Unable to update date'}, status: 400
+      render json: { error: 'Unable to update Date' }, status: 400
     end
   end
 
   def destroy
-    if @tracking 
+    if @tracking
       @tracking.destroy
-      render json: { message: 'Date is successfully deleted'}, status: 200
+      render json: { message: 'Date succesfully deleted' }, status: 200
     else
-        render json: { error: 'unable to delete date...'}, status: 400
+      render json: { error: 'Unable to delete Date' }, status: 400
     end
   end
 
   private
 
   def tracking_params
-    params.require(:tracking).permit(:id, :date, :type, :temperature, :task_id, time: [], symtoms: [] )
-  end
-
-  def find_task
-    @task = Task.find(params[:task_id])
+    params.require(:tracking).permit(:id, :date, :mood, :temperature, :task_id, medicines: [], symptons: [])
   end
 
   def find_tracking
     @tracking = Tracking.find(params[:id])
   end
 
+  def find_task
+    @task = Task.find(params[:task_id])
+  end
 end
